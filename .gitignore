@@ -1,0 +1,8 @@
+Application/obj/
+Domain/obj/
+Persistence/obj/
+Persistence/bin/
+Domain/bin/
+Application/bin/
+.vs/CQRSMediatR/
+.vs/
