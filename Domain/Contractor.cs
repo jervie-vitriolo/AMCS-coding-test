@@ -2,7 +2,7 @@
 
 public class Contractor
 {
-    public int Id { get; set; }
+    public string Id { get; set; }
     public string Name { get; set; } = default!;
     public int Rating { get; set; } = default!;
     
@@ -10,7 +10,7 @@ public class Contractor
     // Parameterless constructor for EF Core
     private Contractor() { }
 
-    public Contractor(int id,string name, int rating)
+    public Contractor(string id,string name, int rating)
     {
         Id = id;
         Name = name;

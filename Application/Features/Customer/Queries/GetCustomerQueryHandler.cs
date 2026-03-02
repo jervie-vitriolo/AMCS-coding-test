@@ -1,4 +1,4 @@
-﻿using Application.Features.Products.DTOs;
+﻿using Application.Features.Customer.DTOs;
 using Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -12,8 +12,7 @@ public class GetCustomerQueryHandler(AppDbContext context)
     {
         return await context.Customers
          .Select(c => new CustomerDto(c.Id,c.FirstName,c.LastName))
-         .Where(c=>c.lastname.Contains(request.lastname))
+         .Where(c=>c.lastname.ToUpper().Contains(request.param.ToUpper()) || c.id.ToUpper().Equals(request.param.ToUpper()))
          .ToListAsync();
-
     }
 }

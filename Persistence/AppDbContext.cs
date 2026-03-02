@@ -17,9 +17,22 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        //customers
         modelBuilder.Entity<Customer>().HasKey(p => p.Id);
         modelBuilder.Entity<Customer>().HasData(
-            new Customer(1, "jervie", "vitriolo")
+            new Customer("CUS1", "Jervie", "Vitriolo")
+            );
+        modelBuilder.Entity<Customer>().HasData(
+            new Customer("CUS2", "Dwane", "Johnson")
+            );
+
+        //constractors
+        modelBuilder.Entity<Contractor>().HasKey(p => p.Id);
+        modelBuilder.Entity<Contractor>().HasData(
+            new Contractor("CON1", "SLVDR Co.", 9)
+            );
+        modelBuilder.Entity<Contractor>().HasData(
+            new Contractor("CON2", "AMCS Group", 10)
             );
     }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

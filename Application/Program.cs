@@ -17,13 +17,25 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapGet("/customers/{lastname:alpha}", async (string lastname, ISender mediatr) =>
+
+app.MapGet("/customers/{IdOrLastName}", async (string param, ISender mediatr) =>
 {
-    var customer = await mediatr.Send(new GetCustomerQuery(lastname));
+    var customer = await mediatr.Send(new GetCustomerQuery(param));
     if (customer == null) return Results.NotFound();
     return Results.Ok(customer);
-});
+}).WithSummary("Retrieves a specific customers by Id or Last Name");
 
+
+/// <summary>
+/// Retrieves a specific contractors by Id or Business Name
+/// </summary>
+app.MapGet("/contractors/{IdOrBusinessName}", async (string param, ISender mediatr) =>
+{
+    var customer = await mediatr.Send(new GetContractorQuery(param));
+    if (customer == null) return Results.NotFound();
+    return Results.Ok(customer);
+
+}).WithSummary("Retrieves a specific contractors by Id or Business Name"); 
 
 app.UseHttpsRedirection();
 app.Run();
