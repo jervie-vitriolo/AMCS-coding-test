@@ -13,7 +13,7 @@ public class GetJobQueryHandler(AppDbContext context)
     {
         return await context.Jobs
          .Select(c => new JobDto(c.Id,c.StartDate,c.DueDate,c.Budget,c.Description,c.AcceptedBy))
-         .Where(c=> c.description.ToUpper().Contains(request.JobDescription))
+         .Where(c=> c.description.ToUpper().Contains(request.JobDescription.ToUpper()))
          .ToListAsync();
     }
 }

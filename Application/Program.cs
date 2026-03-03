@@ -23,7 +23,7 @@ if (app.Environment.IsDevelopment())
 app.MapGet("/customers/{IdOrLastName}", async (string param, ISender mediatr) =>
 {
     var customer = await mediatr.Send(new GetCustomerQuery(param));
-    if (customer == null) return Results.NotFound();
+    if (customer.Count() == 0) return Results.NotFound();
     return Results.Ok(customer);
 }).WithSummary("Retrieves a specific customers by Id or Last Name");
 
@@ -32,7 +32,7 @@ app.MapGet("/customers/{IdOrLastName}", async (string param, ISender mediatr) =>
 app.MapGet("/contractors/{IdOrBusinessName}", async (string param, ISender mediatr) =>
 {
     var customer = await mediatr.Send(new GetContractorQuery(param));
-    if (customer == null) return Results.NotFound();
+    if (customer.Count() == 0) return Results.NotFound();
     return Results.Ok(customer);
 
 }).WithSummary("Retrieves a specific contractors by Id or Business Name");
@@ -56,7 +56,7 @@ app.MapDelete("/jobs/{id:guid}", async (Guid id, ISender mediatr) =>
 app.MapGet("/jobs/{JobDescription}", async (string JobDescription, ISender mediatr) =>
 {
     var jobs = await mediatr.Send(new GetJobQuery(JobDescription));
-    if (jobs == null) return Results.NotFound();
+    if (jobs.Count()==0) return Results.NotFound();
     return Results.Ok(jobs);
 
 }).WithSummary("Retrieves a specific jobs by Job Description");
