@@ -22,9 +22,11 @@ builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
     cfg.AddOpenBehavior(typeof(RequestResponseLoggingBehavior<,>));
     cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
+    cfg.AddOpenBehavior(typeof(CachingBehavior<,>));
 });
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
+builder.Services.AddDistributedMemoryCache();
 
 var app = builder.Build();
 app.UseExceptionHandler();
@@ -32,22 +34,25 @@ app.UseExceptionHandler();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.DisplayRequestDuration();
+    });
 }
 
 //Customers Endpoint
-app.MapGet("/customers/{IdOrLastName}", async (string param, ISender mediatr) =>
+app.MapGet("/customers/{IdOrLastName}", async (string IdOrLastName, ISender mediatr) =>
 {
-    var customer = await mediatr.Send(new GetCustomerQuery(param));
+    var customer = await mediatr.Send(new GetCustomerQuery(IdOrLastName));
     if (customer.Count() == 0) return Results.NotFound();
     return Results.Ok(customer);
 }).WithSummary("Retrieves a specific customers by Id or Last Name");
 
 
 //Contractors Endpoint
-app.MapGet("/contractors/{IdOrBusinessName}", async (string param, ISender mediatr) =>
+app.MapGet("/contractors/{IdOrBusinessName}", async (string IdOrBusinessName, ISender mediatr) =>
 {
-    var customer = await mediatr.Send(new GetContractorQuery(param));
+    var customer = await mediatr.Send(new GetContractorQuery(IdOrBusinessName));
     if (customer.Count() == 0) return Results.NotFound();
     return Results.Ok(customer);
 
