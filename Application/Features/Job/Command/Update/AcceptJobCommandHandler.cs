@@ -7,22 +7,19 @@ using System;
 
 namespace Application.Features.Job.Command.Update;
 
-public class UpdateJobCommandHandler(AppDbContext context) : IRequestHandler<UpdateJobCommand,bool>
+public class AcceptJobCommandHandler(AppDbContext context) : IRequestHandler<AcceptJobCommand,bool>
 {
-    public  async Task<bool> Handle(UpdateJobCommand command, CancellationToken cancellationToken)
+    public  async Task<bool> Handle(AcceptJobCommand command, CancellationToken cancellationToken)
     {
         var job = await context.Jobs
-           .FindAsync(command.Id, cancellationToken);
+           .FindAsync(command.id, cancellationToken);
 
         if (job is null) return false;
 
-        job.StartDate = command.startdate;
-        job.DueDate = command.duedate;
-        job.Budget = command.budget;
-        job.Description = command.description;
         job.AcceptedBy = command.acceptedby;
 
         await context.SaveChangesAsync(cancellationToken);
+
         return true;
     }
 }

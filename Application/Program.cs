@@ -5,6 +5,7 @@ using System.Reflection;
 using Application.Features.Customer.Queries;
 using Application.Features.Job.Command.Create;
 using Application.Features.Job.Command.Delete;
+using Application.Features.Job.Command.Update;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
@@ -39,12 +40,37 @@ app.MapGet("/contractors/{IdOrBusinessName}", async (string param, ISender media
 
 
 //Jobs Endpoint
-app.MapPost("/jobs", async (CreateJobCommand command, IMediator mediatr) =>
+app.MapPost("/job", async (CreateJobCommand command, IMediator mediatr) =>
 {
-    var productId = await mediatr.Send(command);
-    if (Guid.Empty == productId) return Results.BadRequest();
-    return Results.Created($"/products/{productId}", new { id = productId });
+    var jobId = await mediatr.Send(command);
+    if (Guid.Empty == jobId) return Results.BadRequest();
+    return Results.Created($"/job/{jobId}", new { id = jobId });
 }).WithSummary("Create new job");
+
+app.MapGet("/jobs/{JobDescription}", async (string JobDescription, ISender mediatr) =>
+{
+    var jobs = await mediatr.Send(new GetJobQuery(JobDescription));
+    if (jobs.Count() == 0) return Results.NotFound();
+    return Results.Ok(jobs);
+
+}).WithSummary("Retrieves a specific jobs by Job Description");
+
+
+app.MapPut("/job", async (UpdateJobCommand command, IMediator mediatr) =>
+{
+    var result = await mediatr.Send(command);
+    if (!result) return Results.BadRequest();
+    return Results.Created($"/jobs/{result}", new { id = result });
+}).WithSummary("Update job");
+
+
+app.MapPut("/job/joboffer", async (AcceptJobCommand command, IMediator mediatr) =>
+{
+    var result = await mediatr.Send(command);
+    if (!result) return Results.BadRequest();
+    return Results.Created($"/jobs/{result}", new { id = result });
+}).WithSummary("Accept job");
+
 
 app.MapDelete("/jobs/{id:guid}", async (Guid id, ISender mediatr) =>
 {
@@ -52,14 +78,6 @@ app.MapDelete("/jobs/{id:guid}", async (Guid id, ISender mediatr) =>
     return Results.NoContent();
 }).WithSummary("Delete job");
 
-
-app.MapGet("/jobs/{JobDescription}", async (string JobDescription, ISender mediatr) =>
-{
-    var jobs = await mediatr.Send(new GetJobQuery(JobDescription));
-    if (jobs.Count()==0) return Results.NotFound();
-    return Results.Ok(jobs);
-
-}).WithSummary("Retrieves a specific jobs by Job Description");
 
 app.UseHttpsRedirection();
 app.Run();
