@@ -17,7 +17,7 @@ public class Job
     // Parameterless constructor for EF Core
     private Job() { }
 
-    public Job(Guid id, DateTime startdate, DateTime duedate, double budget,string description, string acceptedby)
+    public Job( DateTime startdate, DateTime duedate, double budget,string description, string acceptedby)
     {
         Id = Guid.NewGuid();
         StartDate = startdate;

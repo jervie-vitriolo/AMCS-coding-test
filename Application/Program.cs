@@ -1,19 +1,34 @@
 
-using Persistence;
-using MediatR;
-using System.Reflection;
+using Application.Behaviors;
+using Application.Exceptions;
 using Application.Features.Customer.Queries;
 using Application.Features.Job.Command.Create;
 using Application.Features.Job.Command.Delete;
 using Application.Features.Job.Command.Update;
+using Domain;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using MediatR;
+using Persistence;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>();
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+builder.Services.AddMediatR(cfg =>
+{
+    cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+    cfg.AddOpenBehavior(typeof(RequestResponseLoggingBehavior<,>));
+    cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
+});
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 var app = builder.Build();
+app.UseExceptionHandler();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -60,8 +75,16 @@ app.MapPut("/job", async (UpdateJobCommand command, IMediator mediatr) =>
 {
     var result = await mediatr.Send(command);
     if (!result) return Results.BadRequest();
-    return Results.Created($"/jobs/{result}", new { id = result });
+    return Results.Ok(result);
 }).WithSummary("Update job");
+
+
+app.MapPut("/job/createjoboffer", async (CreateJobOfferCommand command, IMediator mediatr) =>
+{
+    var result = await mediatr.Send(command);
+    if (!result) return Results.BadRequest();
+    return Results.Ok(result);
+}).WithSummary("Create job offer");
 
 
 app.MapPut("/job/joboffer", async (AcceptJobCommand command, IMediator mediatr) =>
@@ -69,7 +92,7 @@ app.MapPut("/job/joboffer", async (AcceptJobCommand command, IMediator mediatr) 
     var result = await mediatr.Send(command);
     if (!result) return Results.BadRequest();
     return Results.Created($"/jobs/{result}", new { id = result });
-}).WithSummary("Accept job");
+}).WithSummary("Accept job offer");
 
 
 app.MapDelete("/jobs/{id:guid}", async (Guid id, ISender mediatr) =>

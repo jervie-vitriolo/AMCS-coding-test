@@ -39,10 +39,10 @@ public class AppDbContext : DbContext
         //jobs
         modelBuilder.Entity<Job>().HasKey(p => p.Id);
         modelBuilder.Entity<Job>().HasData(
-            new Job(Guid.NewGuid(), DateTime.UtcNow, DateTime.Now,10000,"Empire State Building Job",string.Empty)
+            new Job( DateTime.UtcNow, DateTime.Now,10000,"Empire State Building Job",string.Empty)
             );
         modelBuilder.Entity<Job>().HasData(
-            new Job(Guid.NewGuid(), DateTime.UtcNow, DateTime.Now, 210000, "Golden Gate Bridge Job", string.Empty)
+            new Job( DateTime.UtcNow, DateTime.Now, 210000, "Golden Gate Bridge Job", string.Empty)
             );
     }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
