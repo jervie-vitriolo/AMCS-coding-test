@@ -91,7 +91,7 @@ app.MapPut("/job/joboffer", async (AcceptJobCommand command, IMediator mediatr) 
 {
     var result = await mediatr.Send(command);
     if (!result) return Results.BadRequest();
-    return Results.Created($"/jobs/{result}", new { id = result });
+    return Results.Ok(result);
 }).WithSummary("Accept job offer");
 
 

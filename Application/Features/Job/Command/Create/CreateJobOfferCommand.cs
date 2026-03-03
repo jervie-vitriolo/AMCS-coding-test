@@ -2,4 +2,4 @@
 
 namespace Application.Features.Job.Command.Create;
 
-public record CreateJobOfferCommand(Guid id, double Budget) : IRequest<bool>;
+public record CreateJobOfferCommand(Guid id, double budget) : IRequest<bool>;

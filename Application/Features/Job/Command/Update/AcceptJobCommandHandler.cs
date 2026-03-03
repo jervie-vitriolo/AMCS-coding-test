@@ -14,7 +14,10 @@ public class AcceptJobCommandHandler(AppDbContext context) : IRequestHandler<Acc
         var job = await context.Jobs
            .FindAsync(command.id, cancellationToken);
 
-        if (job is null) return false;
+        var customer = await context.Customers
+           .FindAsync(command.acceptedby, cancellationToken);
+
+        if (job is null || customer is null) return false;
 
         job.AcceptedBy = command.acceptedby;
 

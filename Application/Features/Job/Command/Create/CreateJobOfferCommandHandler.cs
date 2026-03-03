@@ -16,7 +16,7 @@ public class CreateJobOfferCommandHandler(AppDbContext context) : IRequestHandle
 
         if (job is null) return false;
 
-        job.Budget = command.Budget;
+        job.Budget = command.budget;
 
         await context.SaveChangesAsync(cancellationToken);
 
