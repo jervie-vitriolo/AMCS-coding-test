@@ -1,4 +1,5 @@
 # AMCS Group Coding Exam
+This solution was based from this requirements https://github.com/dmitrynovik/jobs-marketplace-api
 
 # Prerequisites 
 Must install .NET 10 for ASP.NET Core
@@ -8,3 +9,4 @@ Must install .NET 10 for ASP.NET Core
 2. Right click the solution and Restore NuGet Packages
 3. Build the solution and Run using IIS Express
 4. Swagger UI should appear in the browser https://localhost:44336/swagger/index.html
+
