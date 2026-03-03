@@ -1,7 +1,7 @@
 # AMCS Group Coding Exam
 
 # Prerequisites 
-Must installed .NET 10 for ASP.NET Core
+Must install .NET 10 for ASP.NET Core
 
 # How to run the program
 1. Open the AMCS.sln from the root directory
