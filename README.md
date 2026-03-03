@@ -1,5 +1,5 @@
 # AMCS Group Coding Exam
-This solution was based from this requirements https://github.com/dmitrynovik/jobs-marketplace-api
+This solution was based from this problem statement https://github.com/dmitrynovik/jobs-marketplace-api
 
 # Prerequisites 
 Must install .NET 10 for ASP.NET Core
