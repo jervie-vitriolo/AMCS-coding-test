@@ -12,15 +12,12 @@ public class Job
 
     public string Description { get; set; } = default!;
 
-    public int AcceptedBy { get; set; } = default!;
-
-
-
+    public string AcceptedBy { get; set; } = default!;
 
     // Parameterless constructor for EF Core
     private Job() { }
 
-    public Job(Guid id, DateTime startdate, DateTime duedate, double budget,string description, int acceptedby)
+    public Job(Guid id, DateTime startdate, DateTime duedate, double budget,string description, string acceptedby)
     {
         Id = Guid.NewGuid();
         StartDate = startdate;

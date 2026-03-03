@@ -34,6 +34,16 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Contractor>().HasData(
             new Contractor("CON2", "AMCS Group", 10)
             );
+
+
+        //jobs
+        modelBuilder.Entity<Job>().HasKey(p => p.Id);
+        modelBuilder.Entity<Job>().HasData(
+            new Job(Guid.NewGuid(), DateTime.UtcNow, DateTime.Now,10000,"Empire State Building Job",string.Empty)
+            );
+        modelBuilder.Entity<Job>().HasData(
+            new Job(Guid.NewGuid(), DateTime.UtcNow, DateTime.Now, 10000, "Golden Gate Bridge Job", string.Empty)
+            );
     }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
